@@ -4,11 +4,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/jlhawn/dockramp/build/parser"
+	"github.com/l0rd/docker-unit/build/parser"
 )
 
 // to test that run the following command
-//    GOPATH="$project_dir/Godeps/_workspace:$HOME/GitHub/dockramp" go test -test.v github.com/jlhawn/dockramp/build
+//    GOPATH="$project_dir/Godeps/_workspace:$HOME/GitHub/docker-unit" go test -test.v github.com/l0rd/docker-unit/build
 
 func TestNewTester(t *testing.T) {
 

@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/jlhawn/dockramp",
+	"ImportPath": "github.com/l0rd/docker-unit",
 	"GoVersion": "go1.4.2",
 	"Packages": [
 		"./..."

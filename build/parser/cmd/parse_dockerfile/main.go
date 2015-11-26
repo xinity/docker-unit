@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/jlhawn/dockramp/build/parser"
+	"github.com/l0rd/docker-unit/build/parser"
 )
 
 func main() {

@@ -10,8 +10,8 @@ import (
 	"path/filepath"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/jlhawn/dockramp/build/commands"
 	"github.com/jlhawn/tarsum"
+	"github.com/l0rd/docker-unit/build/commands"
 )
 
 func (b *Builder) handleExtract(args []string, heredoc string) error {

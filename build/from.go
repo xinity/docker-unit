@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/jlhawn/dockramp/build/commands"
+	"github.com/l0rd/docker-unit/build/commands"
 	"github.com/samalba/dockerclient"
 )
 

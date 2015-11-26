@@ -1,9 +1,9 @@
 #!/bin/sh
 
 FAILURES=""
-TARGET="github.com/jlhawn/dockramp/cmd/dockramp"
+TARGET="github.com/l0rd/docker-unit/cmd/docker-unit"
 
-mkdir "$1"
+mkdir -p "$1"
 
 for PLATFORM in $PLATFORMS; do
 	OUTPUTDIR="$1/$PLATFORM"
@@ -12,9 +12,9 @@ for PLATFORM in $PLATFORMS; do
 	export GOPATH="$PROJ_DIR/Godeps/_workspace:$GOPATH"
 	export GOOS="${PLATFORM%/*}"
 	export GOARCH="${PLATFORM#*/}"
-	
-	CMD="go build -o $OUTPUTDIR/dockramp $TARGET"
-	
+
+	CMD="go build -o $OUTPUTDIR/docker-unit $TARGET"
+
 	echo "$CMD" && $CMD || FAILURES="$FAILURES $PLATFORM"
 done
 

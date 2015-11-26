@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/jlhawn/dockramp/build"
+	"github.com/l0rd/docker-unit/build"
 )
 
 const (

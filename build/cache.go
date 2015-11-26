@@ -55,7 +55,7 @@ func (b *Builder) loadCache() (err error) {
 		return fmt.Errorf("unable to get current user: %s", err)
 	}
 
-	cacheFilename := fmt.Sprintf("%s%c%s", usr.HomeDir, filepath.Separator, ".dockrampcache")
+	cacheFilename := fmt.Sprintf("%s%c%s", usr.HomeDir, filepath.Separator, ".dockerunitcache")
 	cacheFile, err := os.Open(cacheFilename)
 	if os.IsNotExist(err) {
 		// No cache file exists to load.
@@ -83,7 +83,7 @@ func (b *Builder) saveCache() (err error) {
 		return fmt.Errorf("unable to get current user: %s", err)
 	}
 
-	cacheFilename := fmt.Sprintf("%s%c%s", usr.HomeDir, filepath.Separator, ".dockrampcache")
+	cacheFilename := fmt.Sprintf("%s%c%s", usr.HomeDir, filepath.Separator, ".dockerunitcache")
 	cacheFile, err := os.OpenFile(cacheFilename, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, os.FileMode(0600))
 	if err != nil {
 		return fmt.Errorf("unable to open cache file: %s", err)

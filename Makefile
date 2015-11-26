@@ -6,16 +6,21 @@ GIT_BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
 all: clean binaries
 
 clean:
-	@echo "+ $@"
-	@rm -rf bundles
+		@echo "+ $@"
+		@rm -rf bundles
 
 image:
-	@echo "+ $@"
-	@dockramp -t dockramp:${GIT_BRANCH}
+		@echo "+ $@"
+		@docker build -t docker-unit-build:${GIT_BRANCH} .
 
 binaries: image
-	@echo "+ $@"
-	$(eval C_ID := $(shell docker create dockramp:${GIT_BRANCH}))
-	@docker start -a ${C_ID}
-	@docker cp ${C_ID}:/bundles .
-	@docker rm ${C_ID}
+		@echo "+ $@"
+		$(eval C_ID := $(shell docker create docker-unit-build:${GIT_BRANCH}))
+		@docker start -a ${C_ID}
+		@docker cp ${C_ID}:/bundles .
+		@docker rm ${C_ID}
+
+test: image
+		@echo "+ $@"
+		$(eval C_ID := $(shell docker run -it --entrypoint /usr/local/bin/make_tests.sh docker-unit-build:${GIT_BRANCH}))
+		@docker rm ${C_ID}

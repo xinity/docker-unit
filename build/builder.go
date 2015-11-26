@@ -9,9 +9,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/jlhawn/dockramp/build/commands"
-	"github.com/jlhawn/dockramp/build/parser"
-	"github.com/jlhawn/dockramp/build/util"
+	"github.com/l0rd/docker-unit/build/commands"
+	"github.com/l0rd/docker-unit/build/parser"
+	"github.com/l0rd/docker-unit/build/util"
 	"github.com/samalba/dockerclient"
 )
 
