@@ -3,40 +3,50 @@ package commands
 
 // List of Dockerfile commands.
 const (
-	Add        = "ADD"
-	Cmd        = "CMD"
-	Copy       = "COPY"
-	Entrypoint = "ENTRYPOINT"
-	Env        = "ENV"
-	Expose     = "EXPOSE"
-	Extract    = "EXTRACT"
-	From       = "FROM"
-	Label      = "LABEL"
-	Maintainer = "MAINTAINER"
-	Onbuild    = "ONBUILD"
-	Run        = "RUN"
-	User       = "USER"
-	Volume     = "VOLUME"
-	Workdir    = "WORKDIR"
+	Add         = "ADD"
+	After       = "@AFTER"
+	AssertTrue  = "ASSERT_TRUE"
+	AssertFalse = "ASSERT_FALSE"
+	Before      = "@BEFORE"
+	Cmd         = "CMD"
+	Copy        = "COPY"
+	Entrypoint  = "ENTRYPOINT"
+	Ephemeral   = "EPHEMERAL"
+	Env         = "ENV"
+	Expose      = "EXPOSE"
+	Extract     = "EXTRACT"
+	From        = "FROM"
+	Label       = "LABEL"
+	Maintainer  = "MAINTAINER"
+	Onbuild     = "ONBUILD"
+	Run         = "RUN"
+	User        = "USER"
+	Volume      = "VOLUME"
+	Workdir     = "WORKDIR"
 )
 
 // Commands is a set of all Dockerfile commands.
 var Commands = map[string]struct{}{
-	Add:        {},
-	Cmd:        {},
-	Copy:       {},
-	Entrypoint: {},
-	Env:        {},
-	Expose:     {},
-	Extract:    {},
-	From:       {},
-	Label:      {},
-	Maintainer: {},
-	Onbuild:    {},
-	Run:        {},
-	User:       {},
-	Volume:     {},
-	Workdir:    {},
+	Add:         {},
+	After:       {},
+	AssertTrue:  {},
+	AssertFalse: {},
+	Before:      {},
+	Cmd:         {},
+	Copy:        {},
+	Entrypoint:  {},
+	Ephemeral:   {},
+	Env:         {},
+	Expose:      {},
+	Extract:     {},
+	From:        {},
+	Label:       {},
+	Maintainer:  {},
+	Onbuild:     {},
+	Run:         {},
+	User:        {},
+	Volume:      {},
+	Workdir:     {},
 }
 
 // FilesystemModifierCommands is a subset of commands that typically modify the
@@ -60,4 +70,14 @@ var ReplaceEnvAllowed = map[string]struct{}{
 	User:    {},
 	Volume:  {},
 	Workdir: {},
+}
+
+var TestAssert = map[string]struct{}{
+	AssertTrue:  {},
+	AssertFalse: {},
+}
+
+var NewTestBlock = map[string]struct{}{
+	After:  {},
+	Before: {},
 }

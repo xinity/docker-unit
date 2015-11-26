@@ -44,12 +44,15 @@ type handlerFunc func(args []string, heredoc string) error
 // Builder is able to build docker images from a local context directory, a
 // Dockerfile, and a docker client connection.
 type Builder struct {
-	daemonURL        string
-	tlsConfig        *tls.Config
-	client           *dockerclient.DockerClient
-	contextDirectory string
-	dockerfilePath   string
-	repo, tag        string
+	daemonURL           string
+	tlsConfig           *tls.Config
+	client              *dockerclient.DockerClient
+	contextDirectory    string
+	dockerfilePath      string
+	dockerTestfilePath  string
+	dockerfileTests     *DockerfileTests
+	dockerfileTestStats *TestStats
+	repo, tag           string
 
 	out io.Writer
 
@@ -85,6 +88,12 @@ func NewBuilder(daemonURL string, tlsConfig *tls.Config, contextDirectory, docke
 		return nil, fmt.Errorf("unable to access build file: %s", err)
 	}
 
+	dockerTestfilePath := ""
+	if _, err := os.Stat(dockerfilePath + "_test"); err == nil {
+		dockerTestfilePath = dockerfilePath + "_test"
+		fmt.Printf("Found test file: %s!\n\n", dockerTestfilePath)
+	}
+
 	// Validate the repository and tag.
 	repo, tag := util.ParseRepositoryTag(repoTag)
 	if repo != "" {
@@ -104,14 +113,15 @@ func NewBuilder(daemonURL string, tlsConfig *tls.Config, contextDirectory, docke
 	}
 
 	b := &Builder{
-		daemonURL:        daemonURL,
-		tlsConfig:        tlsConfig,
-		client:           client,
-		contextDirectory: contextDirectory,
-		dockerfilePath:   dockerfilePath,
-		repo:             repo,
-		tag:              tag,
-		out:              os.Stdout,
+		daemonURL:          daemonURL,
+		tlsConfig:          tlsConfig,
+		client:             client,
+		contextDirectory:   contextDirectory,
+		dockerfilePath:     dockerfilePath,
+		dockerTestfilePath: dockerTestfilePath,
+		repo:               repo,
+		tag:                tag,
+		out:                os.Stdout,
 		config: &config{
 			Labels:       map[string]string{},
 			ExposedPorts: map[string]struct{}{},
@@ -125,6 +135,7 @@ func NewBuilder(daemonURL string, tlsConfig *tls.Config, contextDirectory, docke
 		commands.Copy:       b.handleCopy,
 		commands.Entrypoint: b.handleEntrypoint,
 		commands.Env:        b.handleEnv,
+		commands.Ephemeral:  b.handleRun,
 		commands.Expose:     b.handleExpose,
 		commands.Extract:    b.handleExtract,
 		commands.From:       b.handleFrom,
@@ -149,6 +160,7 @@ func NewBuilder(daemonURL string, tlsConfig *tls.Config, contextDirectory, docke
 
 // Run executes the build process.
 func (b *Builder) Run() error {
+
 	// Parse the Dockerfile.
 	dockerfile, err := os.Open(b.dockerfilePath)
 	if err != nil {
@@ -163,6 +175,33 @@ func (b *Builder) Run() error {
 
 	if len(commands) == 0 {
 		return fmt.Errorf("no commands found in Dockerfile")
+	}
+
+	// Parse the DockerTestfile if it exists
+	if b.dockerTestfilePath != "" {
+
+		tester, err := newTester(b.dockerTestfilePath)
+
+		if err != nil {
+			return err
+		}
+
+		b.dockerfileTests = tester
+
+		commands, err = Inject(commands, tester)
+
+		if err != nil {
+			return err
+		}
+
+		b.dockerfileTestStats = &TestStats{
+			TotalNumberOfTests: GetTotalNumberOfTests(tester),
+			NumberOfTestRan:    0,
+			NumberOfTestPassed: 0,
+			NumberOfTestFailed: 0,
+		}
+
+		defer PrintTestsStats(b.dockerfileTestStats)
 	}
 
 	for i, command := range commands {
@@ -233,10 +272,22 @@ func (b *Builder) dispatch(stepNum int, command *parser.Command) error {
 	fmt.Fprintf(b.out, "Step %d: %s\n", stepNum, commandStr)
 
 	b.uncommitted = true
-	b.uncommittedCommands = append(b.uncommittedCommands, commandStr)
+
+	if cmd != commands.Ephemeral {
+		b.uncommittedCommands = append(b.uncommittedCommands, commandStr)
+	} else {
+		b.dockerfileTestStats.NumberOfTestRan += 1
+	}
 
 	if err := handler(args, command.Heredoc); err != nil {
+		if cmd == commands.Ephemeral {
+			b.dockerfileTestStats.NumberOfTestFailed += 1
+		}
 		return err
+	}
+
+	if cmd == commands.Ephemeral {
+		b.dockerfileTestStats.NumberOfTestPassed += 1
 	}
 
 	// We may not need to commit now but we should if the current command may
@@ -246,6 +297,14 @@ func (b *Builder) dispatch(stepNum int, command *parser.Command) error {
 		if err := b.commit(); err != nil {
 			return fmt.Errorf("unable to commit container image: %s", err)
 		}
+	}
+
+	if b.containerID != "" {
+		if err := b.client.RemoveContainer(b.containerID, true, true); err != nil {
+			return fmt.Errorf("unable to remove container: %s", err)
+		}
+		b.containerID = ""
+		fmt.Fprintf(b.out, " removed temporary container %s\n", b.containerID)
 	}
 
 	return nil
