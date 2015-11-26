@@ -1,0 +1,9 @@
+@AFTER RUN_USERADD
+ASSERT_TRUE USER_EXISTS 'mario'
+ASSERT_TRUE FILE_EXISTS '/home/mario/.profile'
+
+@BEFORE COPY_WORDS
+ASSERT_FALSE FILE_EXISTS '/usr/local/tomcat/webapps/words'
+
+@AFTER COPY_WORDS
+ASSERT_TRUE FILE_EXISTS '/usr/local/tomcat/webapps/words'

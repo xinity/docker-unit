@@ -1,0 +1,7 @@
+FROM tomcat:8.0.28-jre8
+
+RUN useradd -d /home/mario -m -s /bin/bash mario
+
+COPY words /usr/local/tomcat/webapps/
+
+CMD catalina.sh run
