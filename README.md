@@ -4,7 +4,7 @@ A modern infrastructure is built with the same tools we use to develop software 
 
 **Docker-unit helps writing tests for your infrastructure.**
 
-![Image of a Docker-unit](http://www.rainforest-alliance.org/sites/default/files/styles/responsive_breakpoints_theme_rainforest_wide_1x/public/slideshow/header/capybara_0.jpg?itok=G1uvWT23)
+[![docker-unit in action](https://asciinema.org/a/6dnqlny99u5tfk80yhsqykcfz.png)](https://asciinema.org/a/6dnqlny99u5tfk80yhsqykcfz)
 
 #### Quickstart
 This is a `Dockerfile`:
