@@ -22,5 +22,5 @@ binaries: image
 
 test: image
 		@echo "+ $@"
-		$(eval C_ID := $(shell docker run -it --entrypoint /usr/local/bin/make_tests.sh docker-unit-build:${GIT_BRANCH}))
+		$(eval C_ID := $(shell docker run -it --entrypoint make_tests.sh docker-unit-build:${GIT_BRANCH}))
 		@docker rm ${C_ID}
