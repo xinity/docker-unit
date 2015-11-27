@@ -23,6 +23,4 @@ binaries: image
 
 test: image
 		@echo "+ $@"
-		$(eval C_ID := $(shell docker run -it --entrypoint make_tests.sh docker-unit-build:${GIT_BRANCH}))
-		# next line is commented out intentionally: `docker rm` is not supported by circleCI
-		# @docker rm ${C_ID}
+		@docker run -it --entrypoint make_tests.sh docker-unit-build:${GIT_BRANCH}
