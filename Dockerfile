@@ -2,6 +2,9 @@ FROM golang:latest
 
 MAINTAINER 'Josh Hawn <jlhawn@docker.com> (github:jlhawn)'
 
+RUN apt-get update && \
+    apt-get install -y zip
+
 ENV PROJ_DIR /go/src/github.com/l0rd/docker-unit
 
 ENV PLATFORMS '        \

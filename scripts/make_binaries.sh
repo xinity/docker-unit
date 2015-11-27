@@ -4,6 +4,8 @@ FAILURES=""
 TARGET="github.com/l0rd/docker-unit/cmd/docker-unit"
 
 mkdir -p "$1"
+ZIPDIR="$1/zip"
+mkdir -p $ZIPDIR
 
 for PLATFORM in $PLATFORMS; do
 	OUTPUTDIR="$1/$PLATFORM"
@@ -14,8 +16,9 @@ for PLATFORM in $PLATFORMS; do
 	export GOARCH="${PLATFORM#*/}"
 
 	CMD="go build -o $OUTPUTDIR/docker-unit $TARGET"
+        ZIP="zip -q -r $ZIPDIR/docker-unit_$GOOS-$GOARCH.zip $OUTPUTDIR/docker-unit"
 
-	echo "$CMD" && $CMD || FAILURES="$FAILURES $PLATFORM"
+	echo "$CMD" && $CMD && echo "$ZIP" && $ZIP || FAILURES="$FAILURES $PLATFORM"
 done
 
 if [ -n "$FAILURES" ]; then
