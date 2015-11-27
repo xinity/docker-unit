@@ -1,8 +1,7 @@
-# Docker-unit - A Dockerfile test framework
+# Docker Unit  [![Circle CI](https://circleci.com/gh/l0rd/docker-unit.png?style=shield)](https://circleci.com/gh/l0rd/docker-unit)
+*The Dockerfile Test Framework*
 
-A modern infrastructure is built with the same tools we use to develop software : source code, build tools, deployment and test scripts. We call it **Infrastructure as Code**. Docker-unit is a tool to unit test a Docker defined infrastructure.
-
-**Docker-unit helps writing tests for your infrastructure.**
+With Dockerfiles you build your environment. With Docker Unit you test it.
 
 [![docker-unit in action](https://asciinema.org/a/6dnqlny99u5tfk80yhsqykcfz.png)](https://asciinema.org/a/6dnqlny99u5tfk80yhsqykcfz)
 
