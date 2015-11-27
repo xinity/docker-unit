@@ -18,9 +18,11 @@ binaries: image
 		$(eval C_ID := $(shell docker create docker-unit-build:${GIT_BRANCH}))
 		@docker start -a ${C_ID}
 		@docker cp ${C_ID}:/bundles .
-		@docker rm ${C_ID}
+		# next line is commented out intentionally: `docker rm` is not supported by circleCI
+		# @docker rm ${C_ID}
 
 test: image
 		@echo "+ $@"
 		$(eval C_ID := $(shell docker run -it --entrypoint make_tests.sh docker-unit-build:${GIT_BRANCH}))
-		@docker rm ${C_ID}
+		# next line is commented out intentionally: `docker rm` is not supported by circleCI
+		# @docker rm ${C_ID}
