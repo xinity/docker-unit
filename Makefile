@@ -18,7 +18,6 @@ binaries: image
 		$(eval C_ID := $(shell docker create docker-unit-build:${GIT_BRANCH}))
 		@docker start -a ${C_ID}
 		@docker cp ${C_ID}:/bundles .
-		@docker rm ${C_ID}
 
 test: image
 		@echo "+ $@"
