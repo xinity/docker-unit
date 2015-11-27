@@ -11,9 +11,13 @@ dependencies:
     - go get github.com/tcnksm/ghr
   override:
     - make binaries
+
+test:
+  override:
+    - make test
     
 deployment:
   hub:
     branch: master
     commands:
-      - ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --prerelease ${VERSION} $ARTIFACTS_DIR
+      - ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME ${VERSION} $ARTIFACTS_DIR
