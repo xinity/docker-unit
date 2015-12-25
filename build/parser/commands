@@ -1,2 +1,4 @@
 FROM scratch
 MAINTAINER Victor Vieux <victor@docker.com>
+RUN sed -i sed -i 's/abc/def/' file
+ADD /src/.dotfile
