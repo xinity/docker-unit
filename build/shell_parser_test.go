@@ -15,7 +15,7 @@ func TestShellParser(t *testing.T) {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	// envs := []string{"PWD=/home", "SHELL=bash"}
+	envs := []string{"PWD=/home", "SHELL=bash"}
 	for scanner.Scan() {
 		line := scanner.Text()
 
@@ -35,17 +35,17 @@ func TestShellParser(t *testing.T) {
 			t.Fatalf("Error in 'words' - should be 2 words:%q", words)
 		}
 
-		// words[0] = strings.TrimSpace(words[0])
-		// words[1] = strings.TrimSpace(words[1])
+		words[0] = strings.TrimSpace(words[0])
+		words[1] = strings.TrimSpace(words[1])
 
-		// newWord, err := ProcessWord(words[0], envs)
+		newWord, err := processShellWord(words[0], envs)
 
-		// if err != nil {
-		// 	newWord = "error"
-		// }
+		if err != nil {
+		 	newWord = "error"
+		}
 
-		// if newWord != words[1] {
-		// 	t.Fatalf("Error. Src: %s  Calc: %s  Expected: %s", words[0], newWord, words[1])
-		// }
+		if newWord != words[1] {
+		 	t.Fatalf("Error. Src: %s  Calc: %s  Expected: %s", words[0], newWord, words[1])
+		}
 	}
 }
