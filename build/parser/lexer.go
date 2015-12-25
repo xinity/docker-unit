@@ -117,7 +117,7 @@ var allPatterns = []pattern{
 	},
 	{
 		unevaluatedToken: unevaluatedTokenRawArg,
-		re:               regexp.MustCompile(`^([^<#'" \f\n\r\t\v\\]|\\.)+`),
+		re:               regexp.MustCompile(`^([^<#'" \f\n\r\t\v\\]|\\.|<[^<])+`),
 	},
 }
 

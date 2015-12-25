@@ -1,0 +1,2 @@
+FROM scratch
+MAINTAINER Victor Vieux <victor@docker.com>
