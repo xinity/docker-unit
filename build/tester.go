@@ -184,10 +184,22 @@ func Assert2Ephemeral(command *parser.Command) (*parser.Command, error) {
 		}
 		test += "$(whoami) = \"" + command.Args[2] + "\"" 
 		ephemeral.Args = append(ephemeral.Args, test)
+
+	case "IS_INSTALLED":
+		if len(command.Args) != 3 {
+			return nil, fmt.Errorf("Condition %s accept one and only one argument (found %d)", "IS_INSTALLED", len(command.Args)-2)
+		}
+		ephemeral.Args = append(ephemeral.Args, "bash", "-c")
+		test := ""
+		if command.Args[0] == commands.AssertFalse {
+			test += "! "
+		}
+        test += isInstalledGeneric(command.Args[2])
+		ephemeral.Args = append(ephemeral.Args, test)
     
 
 	default:
-		return nil, fmt.Errorf("Condition %s is not supported. Only %s, %s and %s are currently supported. Please open an issue if you want to add support for it.", command.Args[1], "USER_EXISTS", "FILE_EXISTS", "CURRENT_USER_IS")
+		return nil, fmt.Errorf("Condition %s is not supported. Only %s, %s, %s and %s are currently supported. Please open an issue if you want to add support for it.", command.Args[1], "USER_EXISTS", "FILE_EXISTS", "CURRENT_USER_IS", "IS_INSTALLED")
 	}
 
 	return ephemeral, nil
@@ -206,4 +218,14 @@ func PrintTestsStats(stats *TestStats) {
 	fmt.Println("----")
 	fmt.Printf("Run %d tests: %d PASS and %d FAIL\n", stats.NumberOfTestRan, stats.NumberOfTestPassed, stats.NumberOfTestFailed)
 	fmt.Println("----")
+}
+
+// func isInstalledDebian(packagename string) string {
+//     return "\"$(dpkg-query -W -f='${Status}' " +
+//            packagename + 
+//            ")\" = \"install ok installed\""
+// }
+
+func isInstalledGeneric(packagename string) string {
+    return "command -v \"" + packagename + "\"  1>/dev/null 2>&1"
 }
