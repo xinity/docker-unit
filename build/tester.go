@@ -172,9 +172,22 @@ func Assert2Ephemeral(command *parser.Command) (*parser.Command, error) {
 		}
 		test += "-f " + command.Args[2]
 		ephemeral.Args = append(ephemeral.Args, test)
+    
+    case "CURRENT_USER_IS":
+		if len(command.Args) != 3 {
+			return nil, fmt.Errorf("Condition %s accept one and only one argument (found %d)", "CURRENT_USER_IS", len(command.Args)-2)
+		}
+		ephemeral.Args = append(ephemeral.Args, "bash", "-c")
+		test := "test "
+		if command.Args[0] == commands.AssertFalse {
+			test += "! "
+		}
+		test += "$(whoami) = \"" + command.Args[2] + "\"" 
+		ephemeral.Args = append(ephemeral.Args, test)
+    
 
 	default:
-		return nil, fmt.Errorf("Condition %s is not supported. Only %s and %s are currently supported. Please open an issue if you want to add support for it.", command.Args[1], "USER_EXISTS", "FILE_EXISTS")
+		return nil, fmt.Errorf("Condition %s is not supported. Only %s, %s and %s are currently supported. Please open an issue if you want to add support for it.", command.Args[1], "USER_EXISTS", "FILE_EXISTS", "CURRENT_USER_IS")
 	}
 
 	return ephemeral, nil

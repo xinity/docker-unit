@@ -66,7 +66,7 @@ Tests templates are some pre-configured boolean conditions. The following tests-
 
  - `FILE_EXISTS foo.txt`
  - `OS_VERSION_MATCH 'ubuntu 14.04 '`
- - `CURRENT_USER_MATCH 'mario'`
+ - `CURRENT_USER_IS 'mario'`
  - `IS_INSTALLED 'vim'`
  - `IS_RUNNING 'httpd'`
  - `IS_LISTENING_ON_PORT 80`

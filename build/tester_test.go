@@ -25,8 +25,8 @@ func TestNewTester(t *testing.T) {
 		t.Errorf("Failed to test file %s", tests)
 	}
 
-	if blockNum := len(tests.testBlocks); blockNum != 3 {
-		t.Errorf("Expected 3 blocks, found %d", blockNum)
+	if blockNum := len(tests.testBlocks); blockNum != 5 {
+		t.Errorf("Expected 5 blocks, found %d", blockNum)
 	}
 }
 
@@ -40,6 +40,9 @@ func TestInjection(t *testing.T) {
 		{Args: []string{"EPHEMERAL", "bash", "-c", "test ! -f /usr/local/tomcat/webapps/words"}},
 		{Args: []string{"COPY", "words", "/usr/local/tomcat/webapps/"}},
 		{Args: []string{"EPHEMERAL", "bash", "-c", "test -f /usr/local/tomcat/webapps/words"}},
+		{Args: []string{"EPHEMERAL",  "bash", "-c", "test $(whoami) = \"root\""}},
+		{Args: []string{"USER", "mario"}},
+		{Args: []string{"EPHEMERAL",  "bash", "-c", "test $(whoami) = \"mario\""}},
 		{Args: []string{"CMD", "catalina.sh", "run"}},
 	}
 

@@ -7,3 +7,9 @@ ASSERT_FALSE FILE_EXISTS '/usr/local/tomcat/webapps/words'
 
 @AFTER COPY_WORDS
 ASSERT_TRUE FILE_EXISTS '/usr/local/tomcat/webapps/words'
+
+@BEFORE USER_MARIO
+ASSERT_TRUE CURRENT_USER_IS 'root'
+
+@AFTER USER_MARIO
+ASSERT_TRUE CURRENT_USER_IS 'mario'
