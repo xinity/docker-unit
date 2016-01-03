@@ -8,6 +8,9 @@ ASSERT_FALSE FILE_EXISTS '/usr/local/tomcat/webapps/words'
 @AFTER COPY_WORDS
 ASSERT_TRUE FILE_EXISTS '/usr/local/tomcat/webapps/words'
 
+@AFTER RUN_BASH
+ASSERT_TRUE CONTAINS 'bar' '/tmp/foo.txt'
+
 @BEFORE RUN_APT
 ASSERT_FALSE IS_INSTALLED 'vim'
 
