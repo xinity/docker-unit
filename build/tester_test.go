@@ -52,6 +52,7 @@ func TestInjection(t *testing.T) {
 		{Args: []string{"EPHEMERAL", "bash", "-c", "test $(whoami) = \"mario\""}},
 		{Args: []string{"CMD", "catalina.sh", "run"}},
 		{Args: []string{"EPHEMERAL", "bash", "-c", "pidof java"}},
+		{Args: []string{"EPHEMERAL", "bash", "-c", "lsof -i :8080"}},
 	}
 
 	const (

@@ -208,7 +208,7 @@ func Assert2Ephemeral(command *parser.Command) (*parser.Command, error) {
 		}
 		test += command.Args[2]
 		ephemeral.Args = append(ephemeral.Args, test)
-    
+
     case "CONTAINS":
         if len(command.Args) != 4 {
             return nil, fmt.Errorf("Condition %s accept one and only one argument (found %d)", "CONTAINS", len(command.Args)-3)
@@ -222,8 +222,20 @@ func Assert2Ephemeral(command *parser.Command) (*parser.Command, error) {
         ephemeral.Args = append(ephemeral.Args, test)
 
 
+    case "IS_LISTENING":
+        if len(command.Args) != 3 {
+            return nil, fmt.Errorf("Condition %s accept one and only one argument (found %d)", "IS_LISTENING", len(command.Args)-2)
+        }
+        ephemeral.Args = append(ephemeral.Args, "bash", "-c")
+        test := "lsof -i "
+        if command.Args[0] == commands.AssertFalse {
+            test += "! "
+        }
+        test += command.Args[2] 
+        ephemeral.Args = append(ephemeral.Args, test)
+
 	default:
-		return nil, fmt.Errorf("Condition %s is not supported. Only %s, %s, %s and %s are currently supported. Please open an issue if you want to add support for it.", command.Args[1], "USER_EXISTS", "FILE_EXISTS", "CURRENT_USER_IS", "IS_INSTALLED", "IS_RUNNING", "CONTAINS")
+		return nil, fmt.Errorf("Condition %s is not supported. Only %s, %s, %s and %s are currently supported. Please open an issue if you want to add support for it.", command.Args[1], "USER_EXISTS", "FILE_EXISTS", "CURRENT_USER_IS", "IS_INSTALLED", "IS_RUNNING", "CONTAINS", "IS_LISTENING")
 	}
 
 	return ephemeral, nil
