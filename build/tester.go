@@ -209,9 +209,9 @@ func Assert2Ephemeral(command *parser.Command) (*parser.Command, error) {
 		test += command.Args[2]
 		ephemeral.Args = append(ephemeral.Args, test)
 
-    case "CONTAINS":
+    case "FILE_CONTAINS":
         if len(command.Args) != 4 {
-            return nil, fmt.Errorf("Condition %s accept one and only one argument (found %d)", "CONTAINS", len(command.Args)-3)
+            return nil, fmt.Errorf("Condition %s accept one and only one argument (found %d)", "FILE_CONTAINS", len(command.Args)-3)
         }
         ephemeral.Args = append(ephemeral.Args, "bash", "-c")
         test := "grep "
@@ -222,9 +222,9 @@ func Assert2Ephemeral(command *parser.Command) (*parser.Command, error) {
         ephemeral.Args = append(ephemeral.Args, test)
 
 
-    case "IS_LISTENING":
+    case "IS_LISTENING_ON_PORT":
         if len(command.Args) != 3 {
-            return nil, fmt.Errorf("Condition %s accept one and only one argument (found %d)", "IS_LISTENING", len(command.Args)-2)
+            return nil, fmt.Errorf("Condition %s accept one and only one argument (found %d)", "IS_LISTENING_ON_PORT", len(command.Args)-2)
         }
         ephemeral.Args = append(ephemeral.Args, "bash", "-c")
         test := "lsof -i "
